@@ -5,6 +5,8 @@ import styles from "../Styles/CadastroAlunos/Prof.module.css"
 import logo from "../IMG/Logo WMS.png"
 import { Foto } from "../Components/Foto"
 
+import api from "../Services/api"
+
 export default function CadastroAlunos() {
     return (
         <div className={styles.container}>
@@ -24,23 +26,40 @@ export default function CadastroAlunos() {
 
             <div className={styles.formContainer}>
                 <h1 className={styles.h1}>Cadastro de Aluno(a)</h1>
-                <form>
+                <form onSubmit={CadastrarAluno}>
                     <label className={styles.label}>Nome</label>
                     <br />
-                    <Input type="text" placeholder="Digite o seu Nome" name="nome" />
+                    <Input id="nome" type="text" placeholder="Digite o seu Nome" name="nome" />
                     <br />
                     <label className={styles.label}>Número de Matricula</label>
                     <br />
-                    <Input type="number" name="numMatricula" placeholder="Digite o N° Matrícula" />
+                    <Input id="numMatricula" type="number" name="numMatricula" placeholder="Digite o N° Matrícula" />
                     <br />
                     <label className={styles.label}>Senha</label>
                     <br />
-                    <Input type="password" name="senha" placeholder="Digite sua Senha" />
+                    <Input id="senha" type="password" name="senha" placeholder="Digite sua Senha" />
                     <br />
                     <Button>Cadastrar</Button>
                 </form>
             </div>
         </div>
     )
+
+}
+
+function CadastrarAluno(event) {
+    event.preventDefault()
+
+    var nome = document.getElementById("nome").value
+    var numMatricula = document.getElementById("numMatricula").value
+    var senha = document.getElementById("senha").value
+
+    var body = {"nome":nome , "codMatricula":numMatricula , "senha":senha };
+
+    console.log(body)
+
+    api.post(
+        "api/aluno/save",body
+    );
 
 }
