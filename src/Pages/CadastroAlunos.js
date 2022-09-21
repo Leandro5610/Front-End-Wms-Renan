@@ -7,7 +7,33 @@ import { Foto } from "../Components/Foto"
 
 import api from "../Services/api"
 
+let base64String 
+
 export default function CadastroAlunos() {
+    
+    const uploadImage= async(e)=>{
+        console.log(e.target.files);
+        const file= e.target.files[0]
+
+        const teste = await base64(file);
+        base64String = teste
+        console.log(teste);
+    };
+
+const base64 =(file) =>{
+    return new Promise((resolve,reject)=>{
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload=()=>{
+            resolve(fileReader.result)
+        };
+        fileReader.onerror=(error)=>{
+            reject(error)
+        }   ;
+    });
+}
+
     return (
         <div className={styles.container}>
             <div className={styles.imagensContainer}>
@@ -19,8 +45,7 @@ export default function CadastroAlunos() {
                 <div className={styles.fotoDiv}>
                     <Foto></Foto>
                 </div>
-
-                <div></div>
+                <div id="apresentar-imagem" ></div>
 
             </div>
 
@@ -39,6 +64,10 @@ export default function CadastroAlunos() {
                     <br />
                     <Input id="senha" type="password" name="senha" placeholder="Digite sua Senha" />
                     <br />
+                    <input type="file" id="imagem" onChange={(e)=>{
+                        uploadImage(e)
+                    }}/>
+                    <br /> 
                     <Button>Cadastrar</Button>
                 </form>
             </div>
@@ -53,8 +82,14 @@ function CadastrarAluno(event) {
     var nome = document.getElementById("nome").value
     var numMatricula = document.getElementById("numMatricula").value
     var senha = document.getElementById("senha").value
+    
+    /*var convert = base64String.replace(":", "")
+   var  convert2= convert.replace(";","")
+    var convert3=convert2.replace("/","")
+    var convert4= convert3.replace(",","")*/
 
-    var body = {"nome":nome , "codMatricula":numMatricula , "senha":senha };
+    
+    var body = {"nome":nome , "codMatricula":numMatricula , "senha":senha, "imagem": base64String};
 
     console.log(body)
 
@@ -63,3 +98,7 @@ function CadastrarAluno(event) {
     );
 
 }
+
+
+  
+
